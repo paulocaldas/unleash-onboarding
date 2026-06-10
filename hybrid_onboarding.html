@@ -237,6 +237,8 @@
     .ct-tag { font-size: 0.6rem; padding: 2px 5px; }
   }
 
+  .track-wrapper { display: flex; flex-direction: column; }
+
   .track-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -244,11 +246,53 @@
     padding: 18px 20px;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-    cursor: default;
+    transition: border-color 0.2s, border-radius 0.2s;
+    cursor: pointer;
   }
 
-  .track-card:hover { border-color: var(--lime); transform: translateY(-2px); }
+  .track-card:hover { border-color: var(--lime); }
+
+  .track-wrapper.open .track-card {
+    border-color: var(--lime);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .track-toggle-hint {
+    margin-top: 14px;
+    font-size: 0.74rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .track-toggle-arrow {
+    color: var(--lime);
+    font-size: 0.9rem;
+    transition: transform 0.25s;
+    display: inline-block;
+  }
+
+  .track-wrapper.open .track-toggle-arrow { transform: rotate(180deg); }
+
+  .track-calendar {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    border: 1.5px solid transparent;
+    border-top: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .track-wrapper.open .track-calendar {
+    max-height: 500px;
+    border-color: var(--lime);
+  }
+
+  .track-calendar .compare-row2 { grid-template-columns: 50px 1fr; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .track-calendar .compare-row2:last-child { border-bottom: none; }
 
   .track-card::before {
     content: '';
@@ -612,29 +656,31 @@
   .ann-val { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
   .ann-val strong { color: var(--text); font-weight: 500; }
 
-  /* ACRONYM LIST */
-  .acronym-list { display: flex; flex-direction: column; gap: 10px; }
+  /* ACRONYM GRID */
+  .acronym-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    align-items: start;
+  }
 
-  .acronym-row {
-    display: flex;
-    align-items: stretch;
+  .acronym-tile {
     background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
+    cursor: pointer;
     transition: border-color 0.2s;
   }
 
-  .acronym-row:hover { border-color: var(--lime); background: #1e1f23; }
+  .acronym-tile.open { border-color: var(--lime); }
 
-  .acronym-left {
-    padding: 16px 20px;
+  .acronym-tile-header {
+    padding: 14px 16px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    min-width: 190px;
-    max-width: 230px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
   }
 
   .acronym-key {
@@ -646,64 +692,106 @@
     line-height: 1;
   }
 
-  .acronym-fullname {
-    font-size: 0.76rem;
-    font-weight: 500;
-    color: var(--white);
-    line-height: 1.3;
-  }
-
-  .acronym-sep {
-    width: 1px;
-    background: var(--border);
+  .acronym-arrow {
+    font-size: 0.95rem;
+    color: var(--lime);
+    transition: transform 0.2s;
     flex-shrink: 0;
   }
 
+  .acronym-tile.open .acronym-arrow { transform: rotate(45deg); }
+
+  .acronym-tile-body {
+    display: none;
+    padding: 12px 16px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .acronym-tile.open .acronym-tile-body { display: block; }
+
+  .acronym-fullname {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
   .acronym-val {
-    padding: 16px 20px;
-    font-size: 0.82rem;
+    font-size: 0.80rem;
     color: var(--muted);
     line-height: 1.6;
-    display: flex;
-    align-items: center;
-    flex: 1;
   }
 
   /* BENCHMARKS */
-  .benchmark-list { display: flex; flex-direction: column; gap: 8px; }
+  .benchmark-group { margin-bottom: 20px; }
+
+  .benchmark-group-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .benchmark-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  @media (max-width: 700px) { .benchmark-grid { grid-template-columns: repeat(2, 1fr); } }
 
   .benchmark-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 20px;
     background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 8px;
-    transition: all 0.2s;
+    overflow: hidden;
     cursor: pointer;
-    flex-wrap: wrap;
+    transition: border-color 0.2s;
   }
 
   .benchmark-item:hover { border-color: var(--lime); }
   .benchmark-item.open { border-color: var(--lime); }
 
+  .bm-header {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bm-icon { font-size: 1.2rem; }
+
+  .bm-name {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .bm-type {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   .bm-detail {
     display: none;
-    width: 100%;
-    font-size: 0.9rem;
+    padding: 12px 16px 14px;
+    font-size: 0.82rem;
     color: var(--muted);
     line-height: 1.6;
-    padding-top: 10px;
-    margin-top: 4px;
     border-top: 1px solid var(--border);
   }
 
   .benchmark-item.open .bm-detail { display: block; }
-
-  .bm-icon { font-size: 1.2rem; width: 28px; text-align: center; }
-  .bm-name { font-size: 0.88rem; color: var(--text); font-weight: 500; flex: 1; }
-  .bm-type { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
   /* FAQ */
   .faq-list { display: flex; flex-direction: column; gap: 6px; }
@@ -828,65 +916,55 @@
   <div class="section-label">Step 1 — Choose your track</div>
   <div class="section-title">Pick Your Track</div>
   <div class="tracks">
-    <div class="track-card">
-      <div class="track-badge">Balanced</div>
-      <div class="track-name">FLEX Track</div>
-      <div class="track-meta">
-        <div class="track-meta-item">📅 <strong>5 days/week</strong></div>
-        <div class="track-meta-item">🏃 <strong>1 session</strong> per day</div>
-        <div class="track-meta-item">⏱ <strong>60–75 min</strong> per session</div>
-      </div>
-      <div class="track-desc">Well-rounded approach with reduced volume for the everyday athlete.</div>
-    </div>
-    <div class="track-card">
-      <div class="track-badge">Competitive</div>
-      <div class="track-name">PRO Track</div>
-      <div class="track-meta">
-        <div class="track-meta-item">📅 <strong>6 days/week</strong></div>
-        <div class="track-meta-item">⚡ <strong>2 sessions</strong> on some days</div>
-        <div class="track-meta-item">⏱ <strong>75–90 min</strong> per session</div>
-      </div>
-      <div class="track-desc">Built for the fully committed hybrid athlete who has the time and the drive.</div>
-    </div>
-  </div>
 
-  <!-- WEEKLY COMPARISON -->
-  <div class="compare-table no-grid" id="compareTable">
-    <div class="compare-row2">
-      <div class="compare-day2">Mon</div>
-      <div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span></div>
+    <!-- FLEX -->
+    <div class="track-wrapper">
+      <div class="track-card" onclick="toggleTrack(this.closest('.track-wrapper'))">
+        <div class="track-badge">Balanced</div>
+        <div class="track-name">FLEX Track</div>
+        <div class="track-meta">
+          <div class="track-meta-item">📅 <strong>5 days/week</strong></div>
+          <div class="track-meta-item">🏃 <strong>1 session</strong> per day</div>
+          <div class="track-meta-item">⏱ <strong>60–75 min</strong> per session</div>
+        </div>
+        <div class="track-desc">Well-rounded approach with reduced volume for the everyday athlete.</div>
+        <div class="track-toggle-hint">Weekly schedule <span class="track-toggle-arrow">↓</span></div>
+      </div>
+      <div class="track-calendar">
+        <div class="compare-row2"><div class="compare-day2">Mon</div><div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Tue</div><div class="compare-cell2"><span class="ct-tag ct-conditioning">Conditioning</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Wed</div><div class="compare-cell2"><span class="ct-tag ct-rest">Rest</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Thu</div><div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Fri</div><div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span><span class="ct-tag ct-conditioning">Conditioning</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Sat</div><div class="compare-cell2"><span class="ct-tag ct-rest">Rest / Mobility / Accessory</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Sun</div><div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div></div>
+      </div>
     </div>
-    <div class="compare-row2">
-      <div class="compare-day2">Tue</div>
-      <div class="compare-cell2"><span class="ct-tag ct-conditioning">Conditioning</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-conditioning">Conditioning</span><span class="ct-tag ct-run ct-pro">Run</span></div>
+
+    <!-- PRO -->
+    <div class="track-wrapper">
+      <div class="track-card" onclick="toggleTrack(this.closest('.track-wrapper'))">
+        <div class="track-badge">Competitive</div>
+        <div class="track-name">PRO Track</div>
+        <div class="track-meta">
+          <div class="track-meta-item">📅 <strong>6 days/week</strong></div>
+          <div class="track-meta-item">⚡ <strong>2 sessions</strong> on some days</div>
+          <div class="track-meta-item">⏱ <strong>75–90 min</strong> per session</div>
+        </div>
+        <div class="track-desc">Built for the fully committed hybrid athlete who has the time and the drive.</div>
+        <div class="track-toggle-hint">Weekly schedule <span class="track-toggle-arrow">↓</span></div>
+      </div>
+      <div class="track-calendar">
+        <div class="compare-row2"><div class="compare-day2">Mon</div><div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Tue</div><div class="compare-cell2"><span class="ct-tag ct-conditioning">Conditioning</span><span class="ct-tag ct-run ct-pro">Run</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Wed</div><div class="compare-cell2"><span class="ct-tag ct-power ct-pro">Power</span><span class="ct-tag ct-rest ct-pro">Balance</span><span class="ct-tag ct-conditioning ct-pro">Conditioning</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Thu</div><div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Fri</div><div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span><span class="ct-tag ct-conditioning">Conditioning</span><span class="ct-tag ct-run ct-pro">Run</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Sat</div><div class="compare-cell2"><span class="ct-tag ct-rest">Rest / Mobility / Accessory</span></div></div>
+        <div class="compare-row2"><div class="compare-day2">Sun</div><div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div></div>
+      </div>
     </div>
-    <div class="compare-row2">
-      <div class="compare-day2">Wed</div>
-      <div class="compare-cell2"><span class="ct-tag ct-rest">Rest</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-power ct-pro">Power</span><span class="ct-tag ct-rest ct-pro">Balance</span><span class="ct-tag ct-conditioning ct-pro">Conditioning</span></div>
-    </div>
-    <div class="compare-row2">
-      <div class="compare-day2">Thu</div>
-      <div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div>
-    </div>
-    <div class="compare-row2">
-      <div class="compare-day2">Fri</div>
-      <div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span><span class="ct-tag ct-conditioning">Conditioning</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-strength">Strength</span><span class="ct-tag ct-conditioning">Conditioning</span><span class="ct-tag ct-run ct-pro">Run</span></div>
-    </div>
-    <div class="compare-row2">
-      <div class="compare-day2">Sat</div>
-      <div class="compare-cell2"><span class="ct-tag ct-rest">Rest / Mobility / Accessory</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-rest">Rest / Mobility / Accessory</span></div>
-    </div>
-    <div class="compare-row2" style="border-bottom:none">
-      <div class="compare-day2">Sun</div>
-      <div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div>
-      <div class="compare-cell2"><span class="ct-tag ct-run">Run</span></div>
-    </div>
+
   </div>
 
 </section>
@@ -962,38 +1040,91 @@
   <div class="section-label">Step 3 — Set your baseline</div>
   <div class="section-title">Benchmark Tests</div>
   <p style="font-size:0.97rem;color:var(--muted);margin-bottom:12px;line-height:1.9;">Our key sessions are calibrated to your fitness level using these performance benchmarks. If you haven't done them recently, complete them before you begin — they ensure you're training at the right intensity every time.</p>
-  <div class="benchmark-list">
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🏃</span><span class="bm-name">10K Run</span><span class="bm-type">Total Time</span>
-      <div class="bm-detail">Your 10K performance test should be a max-effort 10K time, ideally a recent race PR. Because every run — from intervals to long easy runs — has a specific purpose, this benchmark ensures your training paces are 100% accurate.</div>
+  <!-- CARDIO -->
+  <div class="benchmark-group">
+    <div class="benchmark-group-label">Cardio</div>
+    <div class="benchmark-grid">
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🏃</span>
+          <span class="bm-name">10K Run</span>
+          <span class="bm-type">Total Time</span>
+        </div>
+        <div class="bm-detail">Max-effort 10K, ideally a recent race PR. Every run in the program — intervals, tempo, long runs — is paced from this number. The more accurate it is, the better your training.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🚣</span>
+          <span class="bm-name">2K Row</span>
+          <span class="bm-type">Total Time</span>
+        </div>
+        <div class="bm-detail">Row 2,000m at max effort. Sets your target paces for all rowing sessions — from long aerobic rows to threshold and VO₂ max intervals.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">⛷️</span>
+          <span class="bm-name">2K Ski Erg</span>
+          <span class="bm-type">Total Time</span>
+        </div>
+        <div class="bm-detail">Ski 2,000m at max effort. Same purpose as the 2K Row — defines your ski pacing across all intensities throughout the program.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🏋️</span>
+          <span class="bm-name">Karen</span>
+          <span class="bm-type">Total Time</span>
+        </div>
+        <div class="bm-detail">150 wall balls for time. A classic conditioning benchmark that tests muscular endurance and pacing. Wall ball progressions in the program are calibrated to your score here.</div>
+      </div>
+
     </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🚣</span><span class="bm-name">2K Row</span><span class="bm-type">Total Time</span>
-      <div class="bm-detail">Row 2,000 meters at max effort. This benchmark will define your exact target paces across different workouts, from endurance rows to threshold and VO₂ max intervals.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">⛷️</span><span class="bm-name">2K Ski Erg</span><span class="bm-type">Total Time</span>
-      <div class="bm-detail">Ski 2,000 meters at max effort. Like the row, this benchmark sets your precise pacing targets across all ski erg sessions — whether you're working aerobic capacity, threshold, or high-intensity intervals.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🏋️</span><span class="bm-name">Karen — 150 Wall Balls</span><span class="bm-type">Total Time</span>
-      <div class="bm-detail">Complete 150 wall balls for time. A classic benchmark that tests conditioning and muscular endurance. Some wall ball progressions in the program will be based on your score at this test.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🔢</span><span class="bm-name">1RM Back Squat</span><span class="bm-type">One Rep Max</span>
-      <div class="bm-detail">Your heaviest single back squat. Used to prescribe loading percentages for all squat-based strength work.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🔢</span><span class="bm-name">1RM Strict Press</span><span class="bm-type">One Rep Max</span>
-      <div class="bm-detail">Your heaviest single strict press. Sets the baseline for overhead pressing progressions.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">🔢</span><span class="bm-name">1RM Deadlift</span><span class="bm-type">One Rep Max</span>
-      <div class="bm-detail">Your heaviest single deadlift. Used to guide loading on all hinge-pattern strength sessions.</div>
-    </div>
-    <div class="benchmark-item" onclick="toggleBenchmark(this)">
-      <span class="bm-icon">💪</span><span class="bm-name">Max Pull-Ups</span><span class="bm-type">Max Reps</span>
-      <div class="bm-detail">Maximum unbroken pull-ups. Used to scale pull-up volume and intensity throughout the program.</div>
+  </div>
+
+  <!-- STRENGTH -->
+  <div class="benchmark-group">
+    <div class="benchmark-group-label">Strength</div>
+    <div class="benchmark-grid">
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🔢</span>
+          <span class="bm-name">1RM Back Squat</span>
+          <span class="bm-type">One Rep Max</span>
+        </div>
+        <div class="bm-detail">Your heaviest single back squat. Used to prescribe loading percentages for all squat-based strength work.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🔢</span>
+          <span class="bm-name">1RM Strict Press</span>
+          <span class="bm-type">One Rep Max</span>
+        </div>
+        <div class="bm-detail">Your heaviest single strict press. Sets the baseline for all overhead pressing progressions.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">🔢</span>
+          <span class="bm-name">1RM Deadlift</span>
+          <span class="bm-type">One Rep Max</span>
+        </div>
+        <div class="bm-detail">Your heaviest single deadlift. Used to guide loading on all hinge-pattern strength sessions.</div>
+      </div>
+
+      <div class="benchmark-item" onclick="toggleBenchmark(this)">
+        <div class="bm-header">
+          <span class="bm-icon">💪</span>
+          <span class="bm-name">Max Pull-Ups</span>
+          <span class="bm-type">Max Reps</span>
+        </div>
+        <div class="bm-detail">Maximum unbroken pull-ups. Used to scale pull-up volume and intensity throughout the program.</div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1004,108 +1135,108 @@
 <section id="sec-4" class="fade-in">
   <div class="section-label">Step 4 — Speak the language</div>
   <div class="section-title">Acronym & Glossary</div>
-  <div class="acronym-list">
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">1RM</span><span class="acronym-fullname">One Rep Max</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Your absolute heaviest single lift — the maximum weight you can move for one clean, complete repetition.</div>
-    </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">AHAP</span><span class="acronym-fullname">As Heavy As Possible</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Use your heaviest weight that still allows clean, safe reps throughout the full set.</div>
-    </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">AMRAP</span><span class="acronym-fullname">As Many Reps As Possible</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Keep moving at a steady pace until the timer ends. Your score is total reps or rounds completed.</div>
-    </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">BBJO</span><span class="acronym-fullname">Burpee Box Jump Over</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Perform a burpee, then jump over the box laterally or facing forward.</div>
-    </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">BJO</span><span class="acronym-fullname">Box Jump Over</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Jump onto and over the box — no burpee. Land on the other side and repeat.</div>
-    </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">BBJ</span><span class="acronym-fullname">Burpee Box Jump</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Perform a burpee, then jump up onto the box. Step or jump back down to repeat.</div>
+  <div class="acronym-grid">
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">1RM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">One Rep Max</div><div class="acronym-val">Your absolute heaviest single lift — the maximum weight you can move for one clean, complete repetition.</div></div>
     </div>
 
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">EMOM</span><span class="acronym-fullname">Every Minute on the Minute</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Start the prescribed work at the top of every minute. Rest for whatever time remains before the next minute begins.</div>
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">AHAP</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">As Heavy As Possible</div><div class="acronym-val">Use your heaviest weight that still allows clean, safe reps throughout the full set.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">FFE</span><span class="acronym-fullname">Front Foot Elevated</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Elevating the front foot on a weight plate to increase range of motion and quad loading on lunge-pattern movements.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">AMRAP</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">As Many Reps As Possible</div><div class="acronym-val">Keep moving at a steady pace until the timer ends. Your score is total reps or rounds completed.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">FR</span><span class="acronym-fullname">Front Rack</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Holding a barbell, DB, or KB at shoulder height in the front rack position.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">BBJ</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Burpee Box Jump</div><div class="acronym-val">Perform a burpee, then jump up onto the box. Step or jump back down to repeat.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">G2OH</span><span class="acronym-fullname">Ground-to-Overhead</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Moving a weight from the floor to fully locked out overhead in one fluid motion.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">BBJO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Burpee Box Jump Over</div><div class="acronym-val">Perform a burpee, then jump over the box laterally or facing forward.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">HR Push-Up</span><span class="acronym-fullname">Hand-Release Push-Up</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Lower your chest completely flat to the floor and briefly lift both hands off the ground before driving back up to a full plank lockout.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">BJO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Box Jump Over</div><div class="acronym-val">Jump onto and over the box — no burpee. Land on the other side and repeat.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">OTO</span><span class="acronym-fullname">Over The Object</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Jumping laterally or linearly over a dumbbell or sandbag — often performed after completing a burpee.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">DBall</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Slam Ball / Dead Ball</div><div class="acronym-val">A heavy, non-bouncing rubber ball used for slams, carries, and over-the-shoulder movements.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">RFT</span><span class="acronym-fullname">Rounds For Time</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Complete all prescribed rounds as fast as possible. Your score is your total time.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">EMOM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Every Minute on the Minute</div><div class="acronym-val">Start the prescribed work at the top of every minute. Rest for whatever time remains before the next minute begins.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">ROM</span><span class="acronym-fullname">Range of Motion</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Full range of motion is expected on all movements unless the workout notes specify otherwise.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">FFE</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Front Foot Elevated</div><div class="acronym-val">Elevating the front foot on a weight plate to increase range of motion and quad loading on lunge-pattern movements.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">RPE</span><span class="acronym-fullname">Rate of Perceived Effort</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">A 1–10 scale to gauge intensity. RPE 7 means a few reps left in the tank; RPE 10 is an all-out max effort.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">FR</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Front Rack</div><div class="acronym-val">Holding a barbell, DB, or KB at shoulder height in the front rack position.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">SB</span><span class="acronym-fullname">Sandbag</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">A soft, loadable bag used for carries, cleans, and ground-to-shoulder movements.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">G2OH</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Ground-to-Overhead</div><div class="acronym-val">Moving a weight from the floor to fully locked out overhead in one fluid motion.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">DBall</span><span class="acronym-fullname">Slam Ball or Dead Ball</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">A heavy, non-bouncing rubber ball used for slams, carries, and over-the-shoulder movements.</div>
+
+<div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">OTO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Over The Object</div><div class="acronym-val">Jumping laterally or linearly over a dumbbell or sandbag — often performed after completing a burpee.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">Super Set</span><span class="acronym-fullname">Back-to-Back Exercises</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Two distinct exercises performed back-to-back with zero rest between them. Rest is taken only after the second movement is finished.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">RFT</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Rounds For Time</div><div class="acronym-val">Complete all prescribed rounds as fast as possible. Your score is your total time.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">TC</span><span class="acronym-fullname">Time Cap</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">A time limit on the workout. Stop where you are when the cap hits and record reps or rounds completed.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">ROM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Range of Motion</div><div class="acronym-val">Full range of motion is expected on all movements unless the workout notes specify otherwise.</div></div>
     </div>
-    <div class="acronym-row">
-      <div class="acronym-left"><span class="acronym-key">Ubk/Unbk</span><span class="acronym-fullname">Unbroken</span></div>
-      <div class="acronym-sep"></div>
-      <div class="acronym-val">Completing a target set of repetitions continuously without pausing, dropping the implement, or breaking your athletic posture.</div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">RPE</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Rate of Perceived Effort</div><div class="acronym-val">A 1–10 scale to gauge intensity. RPE 7 means a few reps left in the tank; RPE 10 is an all-out max effort.</div></div>
     </div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">SB</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Sandbag</div><div class="acronym-val">A soft, loadable bag used for carries, cleans, and ground-to-shoulder movements.</div></div>
+    </div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">Super Set</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Back-to-Back Exercises</div><div class="acronym-val">Two or more exercises performed back-to-back with zero rest between them. Rest only after the last movement is done.</div></div>
+    </div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">TC</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Time Cap</div><div class="acronym-val">A time limit on the workout. Stop where you are when the cap hits and record reps or rounds completed.</div></div>
+    </div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">WB</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Wall Ball Shot</div><div class="acronym-val">Squat holding a medicine ball, then drive up explosively and throw the ball to hit a target on the wall.</div></div>
+    </div>
+
+    <div class="acronym-tile" onclick="toggleAcronym(this)">
+      <div class="acronym-tile-header"><span class="acronym-key">Ubk/Unbk</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-body"><div class="acronym-fullname">Unbroken</div><div class="acronym-val">Completing a target set of repetitions continuously without pausing, dropping the implement, or breaking your athletic posture.</div></div>
+    </div>
+
   </div>
 </section>
 
@@ -1119,10 +1250,18 @@
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        I'm short on time — which blocks can I skip?
+        I'm short on time — which track and sessions should I prioritise?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">Skip any block labeled <strong>Optional</strong> first. Never skip Block A — it contains your warm-up and activation, which are the minimum needed for injury prevention. If you're a FLEX athlete, PRO blocks are also optional for you.</div>
+      <div class="faq-a">Start with the <strong>FLEX track</strong> and skip Optional blocks when needed. If 5 days is still too much and you want to compete in hybrid races, prioritise running (Thursday and Sunday) and conditioning (Tuesday and Friday) — those four sessions cover the core of the program.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        FLEX feels like too little volume, but I can't commit to double sessions. What should I do?
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-a">Follow the <strong>PRO track</strong> but focus on the AM sessions, treating PM blocks as optional. You'll get the extra volume without the time pressure of structured doubles.</div>
     </div>
 
     <div class="faq-item">
@@ -1130,7 +1269,7 @@
         What if I don't have a specific piece of equipment?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">Check if an alternative session exists (e.g. A1 vs A2). If neither works, just ask in the WhatsApp group — we'll always suggest a substitute. Don't skip the session entirely.</div>
+      <div class="faq-a">Most days have an alternative session (e.g. A1 vs A2) or a substitution noted in the session Notes. If neither applies, ask in the WhatsApp group — we'll sort something out. Don't skip the session entirely.</div>
     </div>
 
     <div class="faq-item">
@@ -1138,38 +1277,54 @@
         I'm new to running. Should I reduce volume?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">Yes. Cut about 20% from tempo and long runs (e.g. a 14K session becomes ~11K). Keep your usual pacing. However, <strong>keep the full volume for intervals and VO₂ max sessions</strong> — the adjusted paces make those manageable regardless of your level.</div>
+      <div class="faq-a">Yes — especially on the PRO track, where four running sessions a week is a lot for a beginner. Prioritise frequency over volume: 3–4 shorter runs beat 1–2 long ones. Start with Thursday and Sunday, and keep weekly mileage close to what you're already used to. If in doubt, start on the <strong>FLEX track</strong>.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        I don't know my 1RM lifts. What should I do?
+        I don't know my 1RM lifts. Should I test them all before starting?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">Use a good estimate based on recent training. A solid rule of thumb: your 3-rep max at RPE 9 is roughly 93% of your 1RM. If you're unsure, ask in the group — we'll help you estimate safely before your first heavy session.</div>
+      <div class="faq-a">No. A solid recent estimate is enough to work at the right intensities. A useful rule of thumb: your 3-rep max at RPE 9 is roughly <strong>93% of your 1RM</strong>.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        I train alongside other sports. Which sessions are most important?
+        I don't have recent running or erg benchmarks. Does that matter?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">Prioritize <strong>Monday, Tuesday, and Friday</strong> for strength and conditioning. Also aim to complete both running sessions on <strong>Thursday and Sunday</strong>. These five sessions form the core of the program.</div>
+      <div class="faq-a">More than the strength lifts, yes. Running and erg paces drive a large part of the program, so accuracy matters here. For running, a recent 10K race time (within the last 6–8 months) is ideal. If you've never tested the 2K Row or 2K Ski, ask us how to fit them in before your first week.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        The app shows paces I don't understand — how are they calculated?
+        How are paces calculated — and what do "Z2", "tempo", and "threshold" mean?
         <span class="faq-arrow">+</span>
       </div>
-      <div class="faq-a">All run paces are based on your 5K personal time. Erg paces (row/ski) are based on your 2K time trial. Once you enter your benchmarks in the app, it automatically sets the right targets for every session. That's why the benchmark tests matter so much at the start.</div>
+      <div class="faq-a">Run paces come from your 10K benchmark; erg paces from your 2K row and ski tests. Enter your results in the app and all session targets are set automatically. As for labels — <strong>Zone 2 (Z2)</strong> is easy and conversational. <strong>Tempo</strong> is comfortably hard. <strong>Threshold</strong> is the edge of your aerobic limit, sustainable for roughly 20–30 minutes. <strong>VO₂ max</strong> is short, near-maximum effort. When a session says "VO₂ max", expect it to hurt.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What score do I log if I don't finish within the time cap?
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-a">Log the <strong>time cap</strong> as your score and note in the comments where you stopped. Don't keep going past the cap — it defeats the purpose. The cap is there to prompt you to scale (reps, weight, or distance) so you can finish within it next time.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I swap or reorder training days?
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-a">Yes, but think it through. The program is built so muscle groups recover while others work. Occasional swaps are fine — but doing two heavy leg days or two high-volume conditioning sessions back-to-back will generate more fatigue than expected and leave you feeling more worn out than usual.</div>
     </div>
 
   </div>
 </section>
 
 <footer>
-  Built for <a href="https://www.instagram.com/unleash.training/" target="_blank" style="color:var(--lime);font-weight:900;text-decoration:none;font-family:'Barlow Condensed',sans-serif;">Unleash Hybrid Athletes</a>.<br>Questions? Drop them in the WhatsApp group. 💬
+  Built for <a href="https://www.instagram.com/unleash.training/" target="_blank" style="color:var(--lime);font-weight:400;text-decoration:none;">Unleash Hybrid Athletes</a>.<br>Questions? Drop them in the WhatsApp group. 💬
 </footer>
 
 <script>
@@ -1207,8 +1362,12 @@
   // Toggle day rows
   function toggleDay(el) { el.classList.toggle('open'); }
 
+  function toggleTrack(wrapper) { wrapper.classList.toggle('open'); }
+
   // Toggle benchmark
   function toggleBenchmark(el) { el.classList.toggle('open'); }
+
+  function toggleAcronym(el) { el.classList.toggle('open'); }
 
   // Toggle FAQ
   function toggleFaq(btn) {
