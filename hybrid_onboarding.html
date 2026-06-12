@@ -156,7 +156,7 @@
     text-transform: uppercase;
     color: var(--white);
     line-height: 1;
-    margin-bottom: 40px;
+    margin-bottom: 16px;
   }
 
   /* TRACK COMPARISON TABLE */
@@ -254,8 +254,6 @@
 
   .track-wrapper.open .track-card {
     border-color: var(--lime);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
   }
 
   .track-toggle-hint {
@@ -279,16 +277,16 @@
   .track-calendar {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.35s ease;
+    transition: max-height 0.35s ease, margin-top 0.35s ease;
     border: 1.5px solid transparent;
-    border-top: none;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
+    margin-top: 0;
   }
 
   .track-wrapper.open .track-calendar {
     max-height: 500px;
     border-color: var(--lime);
+    margin-top: 8px;
   }
 
   .track-calendar .compare-row2 { grid-template-columns: 50px 1fr; border-bottom: 1px solid rgba(255,255,255,0.04); }
@@ -659,47 +657,38 @@
   /* ACRONYM GRID */
   .acronym-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     align-items: start;
   }
 
+  @media (max-width: 700px) { .acronym-grid { grid-template-columns: repeat(2, 1fr); } }
+
   .acronym-tile {
     background: var(--card);
     border: 1.5px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
     transition: border-color 0.2s;
   }
 
+  .acronym-tile:hover { border-color: var(--lime); }
   .acronym-tile.open { border-color: var(--lime); }
 
   .acronym-tile-header {
     padding: 14px 16px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .acronym-key {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 1.35rem;
-    color: var(--lime);
-    letter-spacing: 0.03em;
-    line-height: 1;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
   }
-
-  .acronym-arrow {
-    font-size: 0.95rem;
-    color: var(--lime);
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
-  .acronym-tile.open .acronym-arrow { transform: rotate(45deg); }
 
   .acronym-tile-body {
     display: none;
@@ -710,11 +699,13 @@
   .acronym-tile.open .acronym-tile-body { display: block; }
 
   .acronym-fullname {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--muted);
     margin-bottom: 6px;
     line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   .acronym-val {
@@ -761,23 +752,20 @@
     padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
 
-  .bm-icon { font-size: 1.2rem; }
-
   .bm-name {
-    font-size: 0.84rem;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 700;
     color: var(--text);
     line-height: 1.3;
   }
 
   .bm-type {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -1047,8 +1035,7 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🏃</span>
-          <span class="bm-name">10K Run</span>
+<span class="bm-name">10K Run</span>
           <span class="bm-type">Total Time</span>
         </div>
         <div class="bm-detail">Max-effort 10K, ideally a recent race PR. Every run in the program — intervals, tempo, long runs — is paced from this number. The more accurate it is, the better your training.</div>
@@ -1056,7 +1043,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🚣</span>
           <span class="bm-name">2K Row</span>
           <span class="bm-type">Total Time</span>
         </div>
@@ -1065,7 +1051,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">⛷️</span>
           <span class="bm-name">2K Ski Erg</span>
           <span class="bm-type">Total Time</span>
         </div>
@@ -1074,7 +1059,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🏋️</span>
           <span class="bm-name">Karen</span>
           <span class="bm-type">Total Time</span>
         </div>
@@ -1091,7 +1075,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🔢</span>
           <span class="bm-name">1RM Back Squat</span>
           <span class="bm-type">One Rep Max</span>
         </div>
@@ -1100,7 +1083,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🔢</span>
           <span class="bm-name">1RM Strict Press</span>
           <span class="bm-type">One Rep Max</span>
         </div>
@@ -1109,7 +1091,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">🔢</span>
           <span class="bm-name">1RM Deadlift</span>
           <span class="bm-type">One Rep Max</span>
         </div>
@@ -1118,7 +1099,6 @@
 
       <div class="benchmark-item" onclick="toggleBenchmark(this)">
         <div class="bm-header">
-          <span class="bm-icon">💪</span>
           <span class="bm-name">Max Pull-Ups</span>
           <span class="bm-type">Max Reps</span>
         </div>
@@ -1138,102 +1118,102 @@
   <div class="acronym-grid">
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">1RM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">1RM</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">One Rep Max</div><div class="acronym-val">Your absolute heaviest single lift — the maximum weight you can move for one clean, complete repetition.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">AHAP</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">AHAP</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">As Heavy As Possible</div><div class="acronym-val">Use your heaviest weight that still allows clean, safe reps throughout the full set.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">AMRAP</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">AMRAP</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">As Many Reps As Possible</div><div class="acronym-val">Keep moving at a steady pace until the timer ends. Your score is total reps or rounds completed.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">BBJ</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">BBJ</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Burpee Box Jump</div><div class="acronym-val">Perform a burpee, then jump up onto the box. Step or jump back down to repeat.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">BBJO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">BBJO</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Burpee Box Jump Over</div><div class="acronym-val">Perform a burpee, then jump over the box laterally or facing forward.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">BJO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">BJO</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Box Jump Over</div><div class="acronym-val">Jump onto and over the box — no burpee. Land on the other side and repeat.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">DBall</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">DBall</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Slam Ball / Dead Ball</div><div class="acronym-val">A heavy, non-bouncing rubber ball used for slams, carries, and over-the-shoulder movements.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">EMOM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">EMOM</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Every Minute on the Minute</div><div class="acronym-val">Start the prescribed work at the top of every minute. Rest for whatever time remains before the next minute begins.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">FFE</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">FFE</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Front Foot Elevated</div><div class="acronym-val">Elevating the front foot on a weight plate to increase range of motion and quad loading on lunge-pattern movements.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">FR</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">FR</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Front Rack</div><div class="acronym-val">Holding a barbell, DB, or KB at shoulder height in the front rack position.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">G2OH</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">G2OH</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Ground-to-Overhead</div><div class="acronym-val">Moving a weight from the floor to fully locked out overhead in one fluid motion.</div></div>
     </div>
 
 <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">OTO</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">OTO</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Over The Object</div><div class="acronym-val">Jumping laterally or linearly over a dumbbell or sandbag — often performed after completing a burpee.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">RFT</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">RFT</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Rounds For Time</div><div class="acronym-val">Complete all prescribed rounds as fast as possible. Your score is your total time.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">ROM</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">ROM</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Range of Motion</div><div class="acronym-val">Full range of motion is expected on all movements unless the workout notes specify otherwise.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">RPE</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">RPE</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Rate of Perceived Effort</div><div class="acronym-val">A 1–10 scale to gauge intensity. RPE 7 means a few reps left in the tank; RPE 10 is an all-out max effort.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">SB</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">SB</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Sandbag</div><div class="acronym-val">A soft, loadable bag used for carries, cleans, and ground-to-shoulder movements.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">Super Set</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">Super Set</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Back-to-Back Exercises</div><div class="acronym-val">Two or more exercises performed back-to-back with zero rest between them. Rest only after the last movement is done.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">TC</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">TC</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Time Cap</div><div class="acronym-val">A time limit on the workout. Stop where you are when the cap hits and record reps or rounds completed.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">WB</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">WB</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Wall Ball Shot</div><div class="acronym-val">Squat holding a medicine ball, then drive up explosively and throw the ball to hit a target on the wall.</div></div>
     </div>
 
     <div class="acronym-tile" onclick="toggleAcronym(this)">
-      <div class="acronym-tile-header"><span class="acronym-key">Ubk/Unbk</span><span class="acronym-arrow">+</span></div>
+      <div class="acronym-tile-header"><span class="acronym-key">Ubk/Unbk</span></div>
       <div class="acronym-tile-body"><div class="acronym-fullname">Unbroken</div><div class="acronym-val">Completing a target set of repetitions continuously without pausing, dropping the implement, or breaking your athletic posture.</div></div>
     </div>
 
